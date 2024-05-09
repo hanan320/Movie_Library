@@ -4,7 +4,7 @@
 **Author Name**: Hanan Khaled Al-Hadi
 
 ### WRRC
-![WRRC](../Movie_Library/img/Untitled%20Diagram.png)
+![WRRC](../Movie_Library/img/wrrc2.png)
 
 ### Overview
 
@@ -34,3 +34,7 @@ I made some routes for getting information:
 1. **Home Page Endpoint (/)**
 2. **Favorite Page Endpoint ("/favorite")**
 3. **Error Handling**
+4. **Trending Movies (/trending)**
+5. **Search Movies (/search)**
+6. **Upcoming Movies (/upcoming)**
+7. **Discover Movies (/discover)**
