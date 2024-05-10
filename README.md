@@ -4,7 +4,7 @@
 **Author Name**: Hanan Khaled Al-Hadi
 
 ### WRRC
-![WRRC](../Movie_Library/img/wrrc2.png)
+![WRRC](../Movie_Library/img/wrrc3.png)
 
 ### Overview
 
@@ -25,12 +25,15 @@ I got my server set up:
 
 #### Routes for Information
 
-I made some routes for getting information:
+I made some routes for getting information.
+I made some routes for posting information.
 
 - Built request function and had the server listening.
 
 
 ### Project Features
+
+#### get method:
 1. **Home Page Endpoint (/)**
 2. **Favorite Page Endpoint ("/favorite")**
 3. **Error Handling**
@@ -38,3 +41,7 @@ I made some routes for getting information:
 5. **Search Movies (/search)**
 6. **Upcoming Movies (/upcoming)**
 7. **Discover Movies (/discover)**
+8. **View Movies (/addMovie) **
+
+#### post method:
+9. **Add Movie  (/addMovie)**
