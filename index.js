@@ -39,6 +39,63 @@ app.get("/discover", discoverHandler);
 app.post('/addMovie', addMovieHandler);
 app.get('/viewMovies', viewMoviesHandler);
 
+//lab14
+app.put('/update/:id',updateHandler);
+app.delete('/delete/:id',deleteHandler);
+app.get('/getmovie/:id', getMovieHandler);
+
+//get Movie Handler
+function getMovieHandler(req, res) {
+    const id = req.params.id;
+    const sql = `SELECT * FROM movies WHERE id = $1`;
+
+    client.query(sql, [id]).then(result => {
+        console.log(result.rows);
+        res.status(200).json(result.rows);
+    })
+    .catch(err => {
+        console.error('Getting movie failed:', err);
+        res.status(500).send('Getting movie failed');
+    });
+}
+
+//Delete Handeler
+function deleteHandler(req, res) {
+    const id  = req.params.id;
+    const values = [id];
+    const sql = 'DELETE FROM movies WHERE id = $1';
+
+    client.query(sql, values)
+        .then(() => {
+            console.log('Movie deleted');
+            res.sendStatus(204); // Use res.sendStatus() for sending status codes without message
+        })
+        .catch(error => {
+            console.error('Error deleting a movie:', error);
+            res.status(500).send('Error deleting movie');
+        });
+}
+
+//Update Handeler
+function updateHandler(req, res) {
+    const { title, release_date, poster_path, overview } = req.body;
+    const id = req.params.id; // Change variable name to lowercase 'id'
+    const data = [title, release_date, poster_path, overview, id]; // Include id in the 'data' array
+    const sql = `UPDATE movies
+                 SET title = $1, release_date = $2, poster_path = $3, overview = $4
+                 WHERE id = $5 RETURNING *`; // Use placeholder for 'id'
+
+    client.query(sql, data)
+        .then(result => {
+            console.log('Movie updated:', result.rows);
+            res.status(200).json(result.rows);
+        })
+        .catch(error => {
+            console.error('Error updating a movie:', error);
+            res.status(500).send('Error updating movie');
+        });
+}
+
 // Constructor function for movie data
 function movieData(title, poster_path, overview) {
     this.title = title;
@@ -69,15 +126,19 @@ function addMovieHandler(req, res) {
 
     console.log(req.body);
 
-    const { id, title, release_date, poster_path, overview } = req.body;
-    let sql = `INSERT INTO movies (id, title, release_date, poster_path, overview)
-        VALUES ($1, $2, $3, $4, $5) RETURNING*;`
-    let value = [id, title, release_date, poster_path, overview]
-    client.query(sql, value)
-        .then((result) => {
-            console.log(result.rows);
-            return res.status(201).json(result.rows)
-        })
+    const { title, release_date, poster_path, overview } = req.body;
+
+    const sql = `INSERT INTO movies (title, release_date, poster_path, overview)
+            VALUES ($1, $2, $3, $4) RETURNING *`;
+
+    const values = [title, release_date, poster_path, overview];
+
+    
+    client.query(sql, values)
+
+    .then((result) => {
+        console.log(result.rows);
+    return res.status(201).json(result.rows) })
 
 }
 
