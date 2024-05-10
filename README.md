@@ -42,6 +42,13 @@ I made some routes for posting information.
 6. **Upcoming Movies (/upcoming)**
 7. **Discover Movies (/discover)**
 8. **View Movies (/addMovie) **
+12. **get movie by id /getMovie/id**
 
 #### post method:
 9. **Add Movie  (/addMovie)**
+
+#### put method:
+10. **Update by id /UPDATE/id**
+
+#### delete method 
+11. **Delete by id /DELETE/id**
