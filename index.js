@@ -3,10 +3,11 @@
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
+require('dotenv').config();
 
 
 const { Client } = require('pg');
-const url = 'postgres://hanan:0000@localhost:5432/lab13'
+const url = process.env.URL;
 const client = new Client(url)
 
 
@@ -19,7 +20,8 @@ app.use(bodyParser.json())
 
 
 app.use(cors());
-const apiKey = '6571af2130113b656cd86322253a0b84';
+const apiKey = process.env.API_KEY;
+
 
 
 // Import movie data from data.json file
