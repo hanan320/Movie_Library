@@ -2,24 +2,27 @@
 
 const express = require('express');
 const cors = require('cors');
+
+const port = 8080;
+
 const app = express();
 app.use(cors());
 
 const axios = require('axios');
 require('dotenv').config();
+
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
 const data = require('./movie_data/data.json');
 
 
 const { Client } = require('pg')
-const url =process.env.URL
+const url = process.env.URL
 const client = new Client(url)
 
-
-const port = 8080;
-
+const api_key = process.env.API_KEY
 
 //routs
 app.get('/', homePageHandler);
@@ -36,8 +39,8 @@ app.post('/addMovie', addMovieHandler);
 app.get('/viewMovies', viewMoviesHandler);
 
 //routs lab14
-app.put('/update/:id',updateHandler);
-app.delete('/delete/:id',deleteHandler);
+app.put('/update/:id', updateHandler);
+app.delete('/delete/:id', deleteHandler);
 app.get('/getmovie/:id', getMovieHandler);
 
 
@@ -67,15 +70,15 @@ function getMovieHandler(req, res) {
         console.log(result.rows);
         res.status(200).json(result.rows);
     })
-    .catch(err => {
-        console.error('Getting movie failed:', err);
-        res.status(500).send('Getting movie failed');
-    });
+        .catch(err => {
+            console.error('Getting movie failed:', err);
+            res.status(500).send('Getting movie failed');
+        });
 }
 
 //Delete Handeler
 function deleteHandler(req, res) {
-    const id  = req.params.id;
+    const id = req.params.id;
     const values = [id];
     const sql = 'DELETE FROM movies WHERE id = $1';
 
@@ -111,7 +114,7 @@ function updateHandler(req, res) {
 }
 
 
-function viewMoviesHandler(req,res) {
+function viewMoviesHandler(req, res) {
 
     const sql = 'SELECT * FROM movies;';
 
@@ -132,12 +135,13 @@ function addMovieHandler(req, res) {
 
     const values = [title, release_date, poster_path, overview];
 
-    
+
     client.query(sql, values)
 
-    .then((result) => {
-        console.log(result.rows);
-    return res.status(201).json(result.rows) })
+        .then((result) => {
+            console.log(result.rows);
+            return res.status(201).json(result.rows)
+        })
 
 }
 
@@ -177,7 +181,7 @@ function homePageHandler(req, res) {
 //Trending Handeler
 function handelTrending(req, res) {
 
-    const url = `https://api.themoviedb.org/3/trending/movie/day?api_key=${apiKey}`;
+    const url = `https://api.themoviedb.org/3/trending/movie/day?api_key=${api_key}`;
     axios.get(url)
         .then(result => {
             console.log(result.data.results);
@@ -191,7 +195,7 @@ function handelTrending(req, res) {
                 )
             })
 
-            res.send(trending);
+            res.json(trending);
         })
         .catch(error => {
             console.error(error);
@@ -206,7 +210,7 @@ function searchHandler(req, res) {
     // Extract movieName from query parameters
     const movieName = req.query.movieName;
     // Construct URL for movie search API
-    const url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${movieName}`;
+    const url = `https://api.themoviedb.org/3/search/movie?api_key=${api_key}&query=${movieName}`;
 
     // Make request to movie search API
     axios.get(url)
@@ -231,7 +235,7 @@ function searchHandler(req, res) {
 
 //upcoming Handler
 function upcomingHandler(req, res) {
-    const url = `https://api.themoviedb.org/3/movie/upcoming?api_key=${apiKey}`;
+    const url = `https://api.themoviedb.org/3/movie/upcoming?api_key=${api_key}`;
     axios.get(url)
         .then(result => {
             console.log(result.data.results);
@@ -254,7 +258,7 @@ function upcomingHandler(req, res) {
 
 //upcoming Handler
 function discoverHandler(req, res) {
-    const url = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}`;
+    const url = `https://api.themoviedb.org/3/discover/movie?api_key=${api_key}`;
     axios.get(url)
         .then(result => {
             console.log(result.data.results);
