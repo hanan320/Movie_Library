@@ -22,7 +22,7 @@ const password=process.env.PG_PASSWORD;
 const Host=process.env.PG_HOST;
 const PORT=process.env.PG_PORT;
 
-const pg =new pg.Client(`postgres://${UserName}:${password}@${Host}:${PORT}/${DataBase}`) ;
+ client  =new pg.Client(`postgres://${UserName}:${password}@${Host}:${PORT}/${DataBase}`) ;
 
 
 
