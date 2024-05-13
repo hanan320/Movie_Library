@@ -12,15 +12,20 @@ app.use(bodyParser.json());
 const data = require('./movie_data/data.json');
 const port = 8080;
 
+const pg = require('pg');
+const client = new Client(pg);
+
 const apiKey = process.env.API_KEY;
 const DataBase=process.env.PG_DATABASE;
 const UserName=process.env.PG_USER;
 const password=process.env.PG_PASSWORD;
 const Host=process.env.PG_HOST;
 const PORT=process.env.PG_PORT;
-const {Client}= require('pg');
-const pg = `postgres://${UserName}:${password}@${Host}:${PORT}/${DataBase}`;
-const client = new Client(pg);
+
+const pg =new pg.Client(`postgres://${UserName}:${password}@${Host}:${PORT}/${DataBase}`) ;
+
+
+
 
 //routs
 app.get('/', homePageHandler);
