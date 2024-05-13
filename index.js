@@ -4,16 +4,14 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 app.use(cors());
+const pg = require('pg');
 const axios = require('axios');
 require('dotenv').config();
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 const data = require('./movie_data/data.json');
-const port = 8080;
 
-const pg = require('pg');
-const client = new Client(pg);
 
 const apiKey = process.env.API_KEY;
 const DataBase=process.env.PG_DATABASE;
@@ -22,7 +20,11 @@ const password=process.env.PG_PASSWORD;
 const Host=process.env.PG_HOST;
 const PORT=process.env.PG_PORT;
 
- client  =new pg.Client(`postgres://${UserName}:${password}@${Host}:${PORT}/${DataBase}`) ;
+const client = new pg.Client (`postgresql://${UserName}:${password}@${Host}:${PORT}/${DataBase}`);
+
+
+
+const port = 8080;
 
 
 
