@@ -191,7 +191,7 @@ function handelTrending(req, res) {
                 )
             })
 
-            res.json(trending);
+            res.send(trending);
         })
         .catch(error => {
             console.error(error);
