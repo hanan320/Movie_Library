@@ -2,41 +2,27 @@
 
 const express = require('express');
 const cors = require('cors');
+const app = express();
+app.use(cors());
 const axios = require('axios');
 require('dotenv').config();
-
-
-
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+const data = require('./movie_data/data.json');
+const port = 8080;
+const apiKey = process.env.API_KEY;
 
 //const url = process.env.URL;
 
-const DataBase= process.env.PG_DATABASE
-const UserName= process.env.PG_USER
-const password= process.env.PG_PASSWORD
-const Host = process.env.PG_HOST
-const Port= process.env.PG_PORT
-
+const DataBase=process.env.PG_DATABASE;
+const UserName=process.env.PG_USER;
+const password=process.env.PG_PASSWORD;
+const Host=process.env.PG_HOST;
+const PORT=process.env.PG_PORT;
 const {Client}= require('pg');
-const dbURL = `postgres://${UserName}:${password}@${Host}:${Port}/${DataBase}`;
-const client = new Client(dbURL);
-
-
-
-const app = express();
-const port = 8080;
-
-const bodyParser = require('body-parser')
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
-
-
-app.use(cors());
-const apiKey = process.env.API_KEY;
-
-
-
-// Import movie data from data.json file
-const data = require('./movie_data/data.json');
+const pg = `postgres://${UserName}:${password}@${Host}:${PORT}/${DataBase}`;
+const client = new Client(pg);
 
 //routs
 app.get('/', homePageHandler);
@@ -52,10 +38,28 @@ app.get("/discover", discoverHandler);
 app.post('/addMovie', addMovieHandler);
 app.get('/viewMovies', viewMoviesHandler);
 
-//lab14
+//routs lab14
 app.put('/update/:id',updateHandler);
 app.delete('/delete/:id',deleteHandler);
 app.get('/getmovie/:id', getMovieHandler);
+
+
+
+// Constructor function for movie data
+function movieData(title, poster_path, overview) {
+    this.title = title;
+    this.poster_path = poster_path;
+    this.overview = overview;
+}
+
+//Constructor function for movie in api data
+function Movie(id, title, release_data, poster_path, overview) {
+    this.id = id;
+    this.title = title;
+    this.release_data = release_data;
+    this.poster_path = poster_path;
+    this.overview = overview;
+}
 
 //get Movie Handler
 function getMovieHandler(req, res) {
@@ -109,21 +113,6 @@ function updateHandler(req, res) {
         });
 }
 
-// Constructor function for movie data
-function movieData(title, poster_path, overview) {
-    this.title = title;
-    this.poster_path = poster_path;
-    this.overview = overview;
-}
-
-//Constructor function for movie in api data
-function Movie(id, title, release_data, poster_path, overview) {
-    this.id = id;
-    this.title = title;
-    this.release_data = release_data;
-    this.poster_path = poster_path;
-    this.overview = overview;
-}
 
 function viewMoviesHandler(req,res) {
 
