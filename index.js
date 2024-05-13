@@ -11,10 +11,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 const data = require('./movie_data/data.json');
 const port = 8080;
+
 const apiKey = process.env.API_KEY;
-
-//const url = process.env.URL;
-
 const DataBase=process.env.PG_DATABASE;
 const UserName=process.env.PG_USER;
 const password=process.env.PG_PASSWORD;
