@@ -52,3 +52,4 @@ I made some routes for posting information.
 
 #### delete method 
 11. **Delete by id /DELETE/id**
+

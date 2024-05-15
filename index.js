@@ -64,7 +64,7 @@ function Movie(id, title, release_data, poster_path, overview) {
 //get Movie Handler
 function getMovieHandler(req, res) {
     const id = req.params.id;
-    const sql = `SELECT * FROM movies WHERE id = $1`;
+    const sql = `SELECT * FROM tableMovies WHERE id = $1`;
 
     client.query(sql, [id]).then(result => {
         console.log(result.rows);
@@ -80,7 +80,7 @@ function getMovieHandler(req, res) {
 function deleteHandler(req, res) {
     const id = req.params.id;
     const values = [id];
-    const sql = 'DELETE FROM movies WHERE id = $1';
+    const sql = 'DELETE FROM tableMovies WHERE id = $1';
 
     client.query(sql, values)
         .then(() => {
@@ -95,12 +95,13 @@ function deleteHandler(req, res) {
 
 //Update Handeler
 function updateHandler(req, res) {
-    const { title, release_date, poster_path, overview } = req.body;
+
+    const { title, release_date, poster_path, overview, comment } = req.body;
     const id = req.params.id; // Change variable name to lowercase 'id'
-    const data = [title, release_date, poster_path, overview, id]; // Include id in the 'data' array
-    const sql = `UPDATE movies
-                 SET title = $1, release_date = $2, poster_path = $3, overview = $4
-                 WHERE id = $5 RETURNING *`; // Use placeholder for 'id'
+    const data = [title, release_date, poster_path, overview, comment, id]; // Include id in the 'data' array
+    const sql = `UPDATE tableMovies
+                 SET title = $1, release_date = $2, poster_path = $3, overview = $4 ,comment=$5
+                 WHERE id = $6 RETURNING *`; // Use placeholder for 'id'
 
     client.query(sql, data)
         .then(result => {
@@ -116,7 +117,7 @@ function updateHandler(req, res) {
 
 function viewMoviesHandler(req, res) {
 
-    const sql = 'SELECT * FROM movies;';
+    const sql = 'SELECT * FROM tableMovies;';
 
     client.query(sql)
         .then((result) => {
@@ -128,12 +129,12 @@ function addMovieHandler(req, res) {
 
     console.log(req.body);
 
-    const { title, release_date, poster_path, overview } = req.body;
+    const { title, release_date, poster_path, overview, comment } = req.body;
 
-    const sql = `INSERT INTO movies (title, release_date, poster_path, overview)
-            VALUES ($1, $2, $3, $4) RETURNING *`;
+    const sql = `INSERT INTO tableMovies (title, release_date, poster_path, overview,comment)
+            VALUES ($1, $2, $3, $4,$5) RETURNING *`;
 
-    const values = [title, release_date, poster_path, overview];
+    const values = [title, release_date, poster_path, overview, comment];
 
 
     client.query(sql, values)
